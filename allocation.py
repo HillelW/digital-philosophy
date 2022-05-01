@@ -1,6 +1,8 @@
 '''
-   implements functions relating to fair allocation of a disputed good, 
-   some of which appear in Aumann and Maschler's 1985 paper: 
+   implements functions relating to fair allocation of a disputed good,
+   also known as a "bankruptcy problem". 
+   
+   see Aumann and Maschler's 1985 paper: 
    "Game Theoretic Analysis of a Bankruptcy Problem from the Talmud."
 '''
 
@@ -11,16 +13,19 @@ from typing import Tuple
 
 
 class Allocation (object):
+    '''represents an allocation problem'''
     def __init__ (self, claims: List[float], good: float):
         '''
+           given a list of claims and a good which is to be allocated
+           amongst the claimants, creates an object representing the
+           corresponding allocation problem.
+
            Example Usage:
 
            allocation = Allocation ([1, 1], 1)
            allocation.proportional_division ()
         '''
-        self.claims = claims
-        self.good = good
-
+        # verify that we are dealing with a valid allocation problem
         if not self.is_valid_allocation_problem ():
             if not self.is_monotonically_increasing ():
                 raise ValueError ('not a valid allocation problem because the claims are not monotonically increasing!')
@@ -29,31 +34,37 @@ class Allocation (object):
             elif not self.sum_of_claims_exceeds_good ():
                 raise ValueError ('not a valid allocation problem because the sum of the claims does not exceed the value of the good!')
 
-    ######################################################
-    # conditions required for a valid allocation problem #
-    ######################################################
+        self.claims = claims
+        self.good = good
+
+    ##############################
+    # HELPER VALIDATION METHODS  #
+    ##############################
 
     def is_valid_allocation_problem (self) -> bool:
         '''returns True if it's a valid allocation problem, False otherwise.'''
         return self.is_monotonically_increasing () and self.all_claims_are_greater_than_zero () and self.sum_of_claims_exceeds_good () and self.each_claim_is_upper_bounded_by_good ()
 
     def is_monotonically_increasing (self) -> bool:
+        '''returns True if the claims are monotonically increasing, False otherwise.'''
         return all (x <= y for x, y in zip (self.claims, self.claims[1:]) )
 
     def all_claims_are_greater_than_zero (self) -> bool:
+        '''returns True if the claims are all greater than zero, False otherwise.'''
         return len ([claim for claim in self.claims if claim < 0]) == 0
 
     def sum_of_claims_exceeds_good (self) -> bool:
+        '''returns True if the sum of the claims exceeds the value of the good, False otherwise.'''
         sum_of_claims = sum (self.claims)
         return sum_of_claims > self.good
 
-    #####################################
-    # various possible allocation rules #
-    #####################################
+    ######################
+    # ALLOCATION METHODS #
+    ######################
 
     def proportional_division (self) -> List[float]:
         '''
-           Example: 
+           Example Usage: 
 
            allocation = Allocation ([100, 200, 300, 400], 700)
            allocation.proportional_division () == [70, 140, 210, 280]
@@ -63,6 +74,13 @@ class Allocation (object):
 
     def equal_division_of_gains (self) -> List[float]:
         '''
+           divides the gains equally, even if one claimant receives more than her initial claim.
+
+           Example Usage:
+
+           allocation = Allocation ([100, 200, 300, 400], 700)
+           allocation.equal_division_of_gains () == [175.0, 175.0, 175.0, 175.0]
+
            note: Equal Division of Gains is not sensible if c1 < g/n, 
            since (at least) the first creditor who claims the least amount 
            will be paid more than she is owed.
@@ -80,7 +98,7 @@ class Allocation (object):
 
            We grant the amount min (ci, a) to claimant i.
 
-           Example: 
+           Example Usage: 
 
            allocation = Allocation ([100, 200, 300, 400], 700)
            allocation.proportional_division () == [100, 200, 200, 200]
@@ -112,9 +130,16 @@ class Allocation (object):
 
     def equal_division_of_losses (self) -> List[float]:
         '''
+           divides the gains equally, even if one claimant goes into debt as a result of her claim.
+
            Note: Equal Division of Losses is not sensible if c1 < (s − g)/n, 
            where s is the sum of claims, g is the value of the good, and n is the number of claims,
            since Creditor 1’s portion of the estate would be negative in that case.
+
+           Example Usage: 
+
+           allocation = Allocation ([100, 200, 300, 400], 700)           
+           allocation.equal_division_of_losses () == [25.0, 125.0, 225.0, 325.0]
         '''
         claims = self.claims
         good = self.good
@@ -134,9 +159,9 @@ class Allocation (object):
 
            We grant the amount min (ci, a) to claimant i.
 
-           Example: 
+           Example Usage: 
 
-           allocation = Allocation([100, 200, 300, 400], 700)
+           allocation = Allocation ([100, 200, 300, 400], 700)
            allocation.constrained_equal_division_of_losses () == [25, 125, 225, 325]
         '''
         result = []
@@ -171,31 +196,43 @@ class Allocation (object):
                 result[index] = 0
         return constrained_equal_division_of_losses ()
 
-    def concede_and_divide_with_two (self, claims: List[float], good: float) -> List[float]:
-        '''see Mishnah Bava Metziah 2a'''
+    def concede_and_divide_with_two (self, claims: List[float]=None, good: float=None) -> List[float]:
+        '''
+           implements the algorithm implicit in Mishnah Bava Metziah 2a as understood 
+           by Rashi s.v. 'and this one says half is mine.
+
+           Example Usage:
+
+           allocation = Allocation ([50, 100], 100)
+           allocation.concede_and_divide_with_two () == [25.0, 75.0]
+        '''
         if not claims and not good:
             claims = self.claims
             good = self.good
         
         if len (claims) != 2:
-            print ('can only apply contested garment rule to case involving exactly two claimants!')
+            print ('can only apply contested garment rule to a case involving exactly two claimants!')
             return None
+
         concession_of_zero_to_one = max (good - claims[0], 0)
         concession_of_one_to_zero = max (good - claims[1], 0)
+
         contested_portion = good - concession_of_zero_to_one - concession_of_one_to_zero
+
         allocation_to_zero = concession_of_one_to_zero + contested_portion / 2 
         allocation_to_one = concession_of_zero_to_one + contested_portion / 2
         return [allocation_to_zero, allocation_to_one] 
 
     def concede_and_divide_with_two_dual (self, claims: List[float], good: float) -> List[float]:
         '''
-           agrees with concede_and_divide_with_two () since that division rule
+           result agrees with concede_and_divide_with_two () since that division rule
            has the property of self-duality.
         '''
-        result = []
         if not claims and not good:
             claims = self.claims
             good = self.good
+        
+        result = []
         sum_of_claims = sum (claims)
 
         # temporarily change value of the good to compute the dual
@@ -208,13 +245,19 @@ class Allocation (object):
             result.append (difference)
         return result
 
-    def concede_and_divide_generalized (self, claims: List[float], good: float) -> List[float]:
-        '''           
-           Example: 
+    def concede_and_divide_generalized (self, claims: List[float]=None, good: float=None) -> List[float]:
+        '''      
+           generalizes the concede_and_divide_with_two () algorithm to a case with n claimants.     
+           
+           Example Usage: 
 
            allocation = Allocation ([100, 200, 300, 400], 700)
            allocation.concede_and_divide_generalized () == [50, 116.667, 216.667, 316.667]
         '''
+        if not claims and not good:
+            claims = self.claims
+            good = self.good
+
         result = []
         for index, claim in enumerate (claims):
             remaining_claims = claims[(index + 1) :]
@@ -270,9 +313,9 @@ class Allocation (object):
             return result
         return dual_rule
 
-    ##############################################
-    # conditions required for a valid allocation #
-    ##############################################
+    ############################
+    # HELPER PREDICATE METHODS #
+    ############################
 
     def is_individually_rational (self, pairs: List[Tuple[float, float]]) -> bool:
         '''
