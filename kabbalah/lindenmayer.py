@@ -10,7 +10,12 @@ class LSystem:
        2. it can execute multiple string replacements in each iteration.
        3. it does not distinguish between terminals and non-terminals (no filtering mechanism).
 
-       see: 
+       Lindenmayer systems were invented in 1968 by Aristid Lindenmayer to study branching biological 
+       structures such as trees.
+       
+       Some kabbalistic texts use this same technique to study the "tree of life".
+
+       See: 
 
        1. Collected Works of Baal ha-Rokeach, Volume 1, Sefer ha-Shem, 93, Amudim, Jerusalem, 2004 (Hebrew).
        2. Collected Works of Baal ha-Rokeach, Volume 1, Sefer ha-Shem, 181, Amudim, Jerusalem, 2004 (Hebrew).
@@ -34,9 +39,6 @@ class LSystem:
            result = system.evaluate (i) # "ABAABABA"
            print ()
     '''
-    # TODO: define recognizer. complement of a langauge is A* - L.
-    # to compute complement, generate all strings of length n from A*
-    # and then subtract all strings of length n from L in each step.
     def __init__ (self, axiom: str, rules: dict):
         self.axiom = axiom
         self.rules = rules

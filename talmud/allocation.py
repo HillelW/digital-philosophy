@@ -6,6 +6,7 @@
    "Game Theoretic Analysis of a Bankruptcy Problem from the Talmud."
 '''
 
+
 import itertools
 from typing import Callable
 from typing import List

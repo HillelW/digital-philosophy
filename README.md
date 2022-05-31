@@ -1,3 +1,3 @@
 # digital-philosophy
 
-Implementations of philosophical ideas.
+Implementations of various philosophical ideas.
