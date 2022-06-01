@@ -87,9 +87,7 @@ In the Mishnah’s second case, Rashi does not feel the need to anticipate a que
 
 Aristotle is quoted in the *Nichomachean Ethics* as follows:
 
-```
-This, then, is what the just: the proportional; the unjust is what violates the proportion.... justice which distributes common possessions is always in accordance with the kind of proportion mentioned above;... and the injustice opposed to this kind of justice is that which violates the proportion.
-```
+"This, then, is what the just: the proportional; the unjust is what violates the proportion.... justice which distributes common possessions is always in accordance with the kind of proportion mentioned above;... and the injustice opposed to this kind of justice is that which violates the proportion."
 
 In the case of a proportional division, the amount each claimant receives from the estate is proportional to *how large his claim is relative to the other claimants*. 
 
@@ -109,7 +107,19 @@ The Mishnah’s second case teaches us that this was not the intent of the Mishn
 
 Eventually, we will need to consider exactly why our Mishnah feels compelled to argue with Aristotle’s ruling (as pointed out by Michel Balinski in his article "What is Just"). We find a similar divergence from the ruling of Aristotle in the Mishnah cited on Kesubos 93a, which accords with the opinion of R. Nasan.
 
-Now that we understand the Mishnah on 2a according to Rashi, let’s consider to the Talmud’s discussion of our Mishnah. 
+According to Rashi, we can ask why the Mishnah on 2a does not rule in accordance with Aristotle's propotional division rule.
+It is likely that the Mishnah prefers its own allocation rule over Aristotle's due to the desirable properties it exhibits:
+
+1. Self-duality - the allocation rule yields the same result whether we view the problem as one of dividing "what is available" or of dividing "what is missing,".
+2. Irrelevance of excess claims - any claims larger than the disputed good are cut down to the size of the good before the allocation rule is applied.
+
+In his paper "New Characterizations of Old Bankruptcy Rules," Dagan proved that the Mishnah’s concede-and-divide rule is the *only rule* which satisfies the two properties of self-duality and irrelevance of excess claims. 
+
+Therefore, it is likely that the Mishnah favored its own rule over Aristotle's because it satisfies these two desirable properties, whereas Aristotle’s proportional rule does not. For other reasons why the Mishnah may have favored its rule over proportional rule, see *How to Divide When there Isn’t Enough* by William Thompson.
+
+According to Maimonies that the Mishnah deploys a constraiend equal losses rule, it is less obvious why this rule would have been prescribed over Aristotle's proportional allocation rule.
+
+Now that we understand the Mishnah on 2a according to Rashi, let’s consider the Talmud’s discussion of the Mishnah. 
 
 The Talmud asks that the language of "I found it and it is all mine" is redundant. On the bottom of 2a, the Talmud concludes that the first case of the Mishanh actually corresponds to two sub-cases:
 
