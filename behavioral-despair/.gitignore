@@ -1,1 +1,4 @@
 .ipynb_checkpoints
+.python-version
+poetry.lock
+pyproject.toml
