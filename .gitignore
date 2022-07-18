@@ -1,1 +1,5 @@
 *__pycache__/
+poetry.lock   
+pyproject.toml
+.ipynb_checkpoints
+.python-version
